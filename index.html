@@ -92,22 +92,31 @@ function moveNoButton() {
     newY = margin + Math.random() * maxY;
   } while (Math.abs(newX - currentX) < distance || Math.abs(newY - currentY) < distance);
 
-  // Déplacement du bouton avec animation
+  // --- Empêcher le bouton d'être cliqué pendant le déplacement ---
+  noBtn.style.pointerEvents = 'none'; // désactive le clic
+
+  // Déplacement avec animation
   noBtn.style.transition = 'transform 0.2s ease';
   noBtn.style.transform = `translate(${newX}px, ${newY}px)`;
 
-  // Mettre à jour la position actuelle pour le prochain déplacement
+  // Mettre à jour la position actuelle
   currentX = newX;
   currentY = newY;
+
+  // Réactiver le bouton après la transition
+  setTimeout(() => {
+    noBtn.style.pointerEvents = 'auto'; // le bouton redevient cliquable (si jamais tu veux cliquer)
+  }, 200); // durée = durée de la transition
 }
 
-// --- Événements pour desktop et mobile ---
+// --- Événements desktop et mobile ---
 noBtn.addEventListener('mouseenter', moveNoButton); // desktop
-noBtn.addEventListener('touchstart', e => {        // mobile
-  e.preventDefault();   // empêche le clic par défaut
-  moveNoButton();
+
+noBtn.addEventListener('touchstart', e => {
+  moveNoButton(); // mobile
 });
-noBtn.addEventListener('touchmove', e => e.preventDefault()); // empêche toucher prolongé
+
+noBtn.addEventListener('touchmove', e => e.preventDefault()); // empêche le doigt de rester dessus
 
 
 // Nom qui bouge
