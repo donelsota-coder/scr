@@ -72,37 +72,43 @@ noBtn.addEventListener('click', () => {
 });
 
 // Bouton Non fuyant au survol ou au touch
+// --- Variables globales pour stocker la position actuelle ---
+let currentX = 0;
+let currentY = 0;
+
+// --- Fonction pour déplacer le bouton "Non" ---
 function moveNoButton() {
   const box = document.querySelector('.qa-box').getBoundingClientRect();
-  
-  const margin = 10; // ← ici tu définis la marge de sécurité en pixels
+  const margin = 10;         // marge de sécurité pour ne pas toucher les bords
   const maxX = box.width - noBtn.offsetWidth - margin;
   const maxY = box.height - noBtn.offsetHeight - margin;
-  const distance = 80;
+  const distance = 80;       // distance minimale entre l'ancienne et la nouvelle position
+
   let newX, newY;
 
+  // Boucle pour garantir que le bouton se déplace assez loin
   do {
-    newX = margin + Math.random() * maxX; // ← on ajoute la marge au départ
+    newX = margin + Math.random() * maxX;
     newY = margin + Math.random() * maxY;
-  } while (Math.abs(newX - noBtn.offsetLeft) < distance && Math.abs(newY - noBtn.offsetTop) < distance);
+  } while (Math.abs(newX - currentX) < distance || Math.abs(newY - currentY) < distance);
 
+  // Déplacement du bouton avec animation
   noBtn.style.transition = 'transform 0.2s ease';
-  noBtn.style.transform = `translate(${newX - noBtn.offsetLeft}px, ${newY - noBtn.offsetTop}px)`;
+  noBtn.style.transform = `translate(${newX}px, ${newY}px)`;
+
+  // Mettre à jour la position actuelle pour le prochain déplacement
+  currentX = newX;
+  currentY = newY;
 }
 
-
-// Déplacement du Non
-// Desktop
-noBtn.addEventListener('mouseenter', moveNoButton);
-
-// Mobile
-noBtn.addEventListener('touchstart', e => {
-  e.preventDefault();       // empêche le "click" par défaut
+// --- Événements pour desktop et mobile ---
+noBtn.addEventListener('mouseenter', moveNoButton); // desktop
+noBtn.addEventListener('touchstart', e => {        // mobile
+  e.preventDefault();   // empêche le clic par défaut
   moveNoButton();
 });
-noBtn.addEventListener('touchmove', e => {
-  e.preventDefault();       // empêche que le bouton soit cliqué
-});
+noBtn.addEventListener('touchmove', e => e.preventDefault()); // empêche toucher prolongé
+
 
 // Nom qui bouge
 function moveName() {
