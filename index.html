@@ -74,20 +74,22 @@ noBtn.addEventListener('click', () => {
 // Bouton Non fuyant au survol ou au touch
 function moveNoButton() {
   const box = document.querySelector('.qa-box').getBoundingClientRect();
-  const maxX = box.width - noBtn.offsetWidth;
-  const maxY = box.height - noBtn.offsetHeight;
+  
+  const margin = 10; // ← ici tu définis la marge de sécurité en pixels
+  const maxX = box.width - noBtn.offsetWidth - margin;
+  const maxY = box.height - noBtn.offsetHeight - margin;
   const distance = 80;
   let newX, newY;
 
   do {
-    newX = Math.random() * maxX;
-    newY = Math.random() * maxY;
+    newX = margin + Math.random() * maxX; // ← on ajoute la marge au départ
+    newY = margin + Math.random() * maxY;
   } while (Math.abs(newX - noBtn.offsetLeft) < distance && Math.abs(newY - noBtn.offsetTop) < distance);
 
-  // Forcer le recalcul avec transform
   noBtn.style.transition = 'transform 0.2s ease';
   noBtn.style.transform = `translate(${newX - noBtn.offsetLeft}px, ${newY - noBtn.offsetTop}px)`;
 }
+
 
 // Déplacement du Non
 // Desktop
