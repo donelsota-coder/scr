@@ -78,17 +78,29 @@ function moveNoButton() {
   const maxY = box.height - noBtn.offsetHeight;
   const distance = 80;
   let newX, newY;
+
   do {
     newX = Math.random() * maxX;
     newY = Math.random() * maxY;
   } while (Math.abs(newX - noBtn.offsetLeft) < distance && Math.abs(newY - noBtn.offsetTop) < distance);
 
+  // Forcer le recalcul avec transform
+  noBtn.style.transition = 'transform 0.2s ease';
   noBtn.style.transform = `translate(${newX - noBtn.offsetLeft}px, ${newY - noBtn.offsetTop}px)`;
 }
 
 // Déplacement du Non
+// Desktop
 noBtn.addEventListener('mouseenter', moveNoButton);
-noBtn.addEventListener('touchstart', moveNoButton);
+
+// Mobile
+noBtn.addEventListener('touchstart', e => {
+  e.preventDefault();       // empêche le "click" par défaut
+  moveNoButton();
+});
+noBtn.addEventListener('touchmove', e => {
+  e.preventDefault();       // empêche que le bouton soit cliqué
+});
 
 // Nom qui bouge
 function moveName() {
